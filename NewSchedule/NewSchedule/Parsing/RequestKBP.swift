@@ -1,0 +1,215 @@
+//
+//  RequestKBP.swift
+//  NewSchedule
+//
+//  Created by Тимофей Лукашевич on 2/23/20.
+//  Copyright © 2020 IvanLyuhtikov. All rights reserved.
+//
+
+import UIKit
+
+typealias CurriculumDay = (pairName: String, teacher: String, room: String, group: String, numberPare: String)?
+
+
+fileprivate class DayFilling :NSObject {
+    
+    var isPairExistByNumber : [Bool] = Array(repeating: true, count: 7)
+    var pairAtNumber : [CurriculumDay] = [] //Array(repeating: CurriculumDay("", "", "", "", ""), count: 7)
+    override init() {
+        
+        super.init()
+        for _ in 1...7 {
+            let el:CurriculumDay = ("", "", "", "", "")
+            pairAtNumber.append(el)
+        }
+        
+    }
+}
+
+
+class RequestKBP :NSObject {
+    
+    static let dispGroup = DispatchGroup()
+    static var Curriculum :[CurriculumDay]? = nil
+    static var PointsOfChanges : [String]? = nil
+    
+    
+    override private init() {
+        super.init()
+    }
+    
+    class func getData(stringURL: String) {
+ 
+        RequestKBP.Curriculum = []
+        dispGroup.enter()
+        guard let url = URL(string: stringURL) else { return }
+        
+        _ = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data else { return }
+            
+            var htmlContext = String(data: data, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
+            let curiculum = RequestKBP.parseEmptyPair(htmlData: htmlContext)
+            
+            htmlContext = htmlContext?.replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
+            RequestKBP.PointsOfChanges = RequestKBP.getChangeOfPairSwitcher(htmlContext: htmlContext)
+            htmlContext = searchByRegularExpresion(regularEx: #"<table\s+style=\"padding-top:10px;\">.+<\/table>"#, str: htmlContext ?? "")[0]
+            
+            var dayCarricullum: [String] = []
+            var pairsArray :[CurriculumDay] = []
+            for weekNuber in 1...2
+            {
+                let weekLater = weekNuber == 1 ? "l":"r"
+                for dayNumber in 1...6
+                {
+                    let reg = "class=\"pair \(weekLater)w_\(dayNumber)( added)?" + #"((\s)week week\d)?\">.{1,1000}<!"#
+                    dayCarricullum = searchByRegularExpresion(regularEx: reg, str: htmlContext ?? "")
+                    
+                    dayCarricullum = dayCarricullum.map({str in str
+                                .replacingOccurrences(of: #"class=\"pair (l|r)w_\d(\s*added)?\">"#, with: "  ", options: .regularExpression)
+                                .replacingOccurrences(of: #"<div class=\"((left-column)|(right-column))\">"#, with: "  ", options: .regularExpression)
+                                .replacingOccurrences(of: #"<div class=\"((subject)|(teacher)|(group)|(place))\">"#, with: "  ", options: .regularExpression)
+                                .replacingOccurrences(of: #"<a href=\"\?cat=((subject)|(teacher)|(group)|(place))&amp;id=(\d{1,4})?\">"#, with: "  ", options: .regularExpression)
+                                .replacingOccurrences(of: #"((</a>)|(</div>)|(</span>)|(</td>)|(<td>)|(\">)|(<div class=\" )|(<!)|(</tr>)|(<tr>))"#, with: "", options: .regularExpression)
+                                .replacingOccurrences(of: #"(<span )?class=\"((group-span)|(extra)|(group-span))(\")?>"#, with: "  ", options: .regularExpression)
+                                .replacingOccurrences(of: #"((<div class=\"extra)|(<span class=\"group-span)|(-- pair-number=\"\d\" day=\"\d\" --> <div class=\"empty-pair))"#, with: "", options: .regularExpression)
+                                .replacingOccurrences(of: #"(<td class=\"number\d)|(class=\"pair (l|r)w_\d week week\d)|(class=\"pair lw_1 added )"#, with: "", options: .regularExpression)
+                        })
+                    
+                    for dayString in dayCarricullum {
+                        
+                        var copy = dayString
+                        var el:CurriculumDay = ("", "", "", "", "")
+                        el?.room = copy.replacingOccurrences(of: #"^\s+\w+\d*\w*\s+(\s*\w+\s+.{2,5}){1,2}\s+\w-\d+\s+"#, with:"" , options : .regularExpression)
+                                       .replacingOccurrences(of: #"\s+"#, with:"" , options : .regularExpression).replacingOccurrences(of: #"\d\s*неделя"#, with:"" , options : .regularExpression)
+                        
+                        copy = copy.replacingOccurrences(of: el!.room, with:"" , options : .regularExpression)
+                        
+                        el?.group = copy.replacingOccurrences(of: #"^\s+\w+\d*\w*\s+(\s*\w+\s+.{2,5}){1,2}"#, with:"" , options : .regularExpression)
+                            .replacingOccurrences(of: #"\s+"#, with:"" , options : .regularExpression).replacingOccurrences(of: #"\d\s*неделя"#, with:"" , options : .regularExpression)
+                        
+                        copy = copy.replacingOccurrences(of: el!.group, with:"" , options : .regularExpression)
+                        
+                        el?.pairName = searchByRegularExpresion(regularEx: #"^\s+\w+"#, str: copy)[0].replacingOccurrences(of: #"\s{2,}"#, with: " ", options: .regularExpression).replacingOccurrences(of: #"\d\s*неделя"#, with:"" , options : .regularExpression)
+                        
+                        copy = copy.replacingOccurrences(of: el!.pairName, with:"" , options : .regularExpression)
+                        
+                        el?.teacher = copy.replacingOccurrences(of: #"\s{2,}"#, with: " ", options: .regularExpression).replacingOccurrences(of: #"\d\s*неделя"#, with:"" , options : .regularExpression)
+                        
+                        pairsArray.append( el)
+                        
+                    }
+                     
+                }
+               
+            }
+            
+            var count = 0
+            for (ind, _) in curiculum.enumerated()
+            {
+                for (pairIndex ,pairExist) in curiculum[ind].isPairExistByNumber.enumerated()
+                {
+                    if pairExist{
+                        curiculum[ind].pairAtNumber[pairIndex] = pairsArray[count]
+                        count += 1
+                    }
+                }
+            }
+            
+            for el in curiculum {
+                RequestKBP.Curriculum?.append(contentsOf: el.pairAtNumber)
+            }
+            
+            var pairNumberToPust = 1
+            for (index, _) in RequestKBP.Curriculum!.enumerated() {
+                
+                if RequestKBP.Curriculum![index]!.pairName != ""
+                {
+                    pairNumberToPust = pairNumberToPust == 8 ? 1 : pairNumberToPust
+                    RequestKBP.Curriculum![index]!.numberPare = String(pairNumberToPust)
+                }
+                pairNumberToPust += 1
+            }
+            
+            dispGroup.leave()
+            
+        }.resume()
+        
+    }
+    
+    
+    fileprivate class func parseEmptyPair(htmlData: String?) -> [DayFilling] {
+        
+        var dataArr = searchByRegularExpresion(regularEx:#"(<td class=\"number\">\d</td>)|(\s+<td>\s+<!-- pair-number=\"\d\" day=\"\d\" -->\s+<div class=\"empty-pair\"></div>\s+</td>)|(<div class=\"pair (r|l)w_\d week week\d removed\">)"# , str: htmlData ?? "")
+
+        dataArr = dataArr.map({ $0
+            .replacingOccurrences(of: #"<td>\s+<!-- pair-number=\"\d"#, with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"(\" day=\")|(\" -->\s+)"#, with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"<div class="empty-pair"></div>\s+</td>"#, with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"(<div class=\"pair (r|l)w_)|( week week\d removed\">)"#, with: "         ", options: .regularExpression)
+            .replacingOccurrences(of: #"(<td class=\"number\">)|(</td>)"#, with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"\s+"#, with: "          ", options: .regularExpression)
+        })
+        
+        var pairNumber = 0
+        var CR :[DayFilling] = []
+        for _ in 1...12 {
+            CR.append(DayFilling())
+        }
+        var predNumber:String = ""
+        
+        for (elIndex, _) in dataArr.enumerated()
+        {
+            if let _ = dataArr[elIndex].range(of: #"^\d"#, options: .regularExpression) {
+                
+                if predNumber != dataArr[elIndex]{
+                    pairNumber += 1
+                    predNumber = dataArr[elIndex]
+                }
+                
+            } else {
+                
+                var dayNumber = Int(dataArr[elIndex].replacingOccurrences(of: #"\s+"#, with: "", options: .regularExpression)) ?? 0
+                dayNumber -= 1
+                var tempPairNumber = pairNumber
+                if pairNumber > 7
+                {
+                    dayNumber += 6
+                    tempPairNumber -= 7
+                }
+                    tempPairNumber -= 1
+                    CR[dayNumber].isPairExistByNumber[tempPairNumber] = false
+                }
+            
+        }
+        return CR;
+    }
+    
+    
+    private class func getChangeOfPairSwitcher (htmlContext: String? ) -> [String] {
+        
+        var result = [String]()
+        var htmlDataOfChanges = searchByRegularExpresion(regularEx: #"<tr class=\"zamena\">(\s*<th>.{1,200}</th>){7}\s*</tr>"# , str: htmlContext ?? "")
+            
+        htmlDataOfChanges = htmlDataOfChanges.map({ (str) in str
+                .replacingOccurrences(of: #"<tr class=\"zamena\">\s*<th>&nbsp;</th>"#, with: "", options: .regularExpression)
+                .replacingOccurrences(of: #"<th></th>\s*</tr>\s*"#, with: "", options: .regularExpression)
+                .replacingOccurrences(of: #"<label><input type=\"checkbox\" class=\"ch_moves\" id=\"lw_\d\" checked=\"checked\" />"#, with: "", options: .regularExpression)
+                .replacingOccurrences(of: #"</label></th>"#, with: "", options: .regularExpression)
+                
+        })
+         
+        for str in htmlDataOfChanges
+        {
+            result += searchByRegularExpresion(regularEx: #"<th>\s*(Замен нет|Показать замены)?\s*</th>"#, str: str)
+        }
+        
+        result = result.map({ str in str
+                .replacingOccurrences(of: #"<th> Замен нет </th>"#, with: "расписание установленно : замен нет", options: .regularExpression)
+                .replacingOccurrences(of: #"<th>  Показать замены </th>"#, with: "расписание установленно : есть замены", options: .regularExpression)
+                .replacingOccurrences(of: #"<th> </th>"#, with: "нет точного рассписания", options: .regularExpression)
+                
+        })
+        return result
+    }
+    
+}
