@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		447FFEE72402B62000A47221 /* RequestKBP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447FFEE62402B62000A47221 /* RequestKBP.swift */; };
+		447FFEE92402B6E500A47221 /* ParsingMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447FFEE82402B6E500A47221 /* ParsingMethods.swift */; };
 		451EF581240252A8002497C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451EF580240252A8002497C8 /* AppDelegate.swift */; };
 		451EF583240252A8002497C8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451EF582240252A8002497C8 /* SceneDelegate.swift */; };
 		451EF585240252A8002497C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451EF584240252A8002497C8 /* ViewController.swift */; };
@@ -19,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		447FFEE62402B62000A47221 /* RequestKBP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestKBP.swift; sourceTree = "<group>"; };
+		447FFEE82402B6E500A47221 /* ParsingMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingMethods.swift; sourceTree = "<group>"; };
 		451EF57D240252A8002497C8 /* NewSchedule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewSchedule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		451EF580240252A8002497C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		451EF582240252A8002497C8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -43,6 +47,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		447FFEE52402B5EE00A47221 /* Parsing */ = {
+			isa = PBXGroup;
+			children = (
+				447FFEE62402B62000A47221 /* RequestKBP.swift */,
+				447FFEE82402B6E500A47221 /* ParsingMethods.swift */,
+			);
+			path = Parsing;
+			sourceTree = "<group>";
+		};
 		451EF574240252A8002497C8 = {
 			isa = PBXGroup;
 			children = (
@@ -62,6 +75,7 @@
 		451EF57F240252A8002497C8 /* NewSchedule */ = {
 			isa = PBXGroup;
 			children = (
+				447FFEE52402B5EE00A47221 /* Parsing */,
 				451EF580240252A8002497C8 /* AppDelegate.swift */,
 				451EF582240252A8002497C8 /* SceneDelegate.swift */,
 				451EF584240252A8002497C8 /* ViewController.swift */,
@@ -149,6 +163,8 @@
 			files = (
 				451EF59724025535002497C8 /* Extension.swift in Sources */,
 				451EF585240252A8002497C8 /* ViewController.swift in Sources */,
+				447FFEE72402B62000A47221 /* RequestKBP.swift in Sources */,
+				447FFEE92402B6E500A47221 /* ParsingMethods.swift in Sources */,
 				451EF581240252A8002497C8 /* AppDelegate.swift in Sources */,
 				451EF5952402544B002497C8 /* CustomCell.swift in Sources */,
 				451EF583240252A8002497C8 /* SceneDelegate.swift in Sources */,
