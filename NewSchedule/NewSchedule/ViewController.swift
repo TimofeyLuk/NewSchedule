@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     
+    
     var arr = [["Ivan"],
                 ["Ivan", "Andrey", "Bidlo", "Alex"],
                 ["Ivan", "Tim", "Andrey", "Bidlo"],
