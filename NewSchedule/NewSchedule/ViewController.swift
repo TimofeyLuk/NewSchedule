@@ -9,20 +9,27 @@
 import UIKit
 
 // EXAMPLE HOW TO USE COLLEGE DATA
+//RequestKBP.getData(stringURL: links[links.keys[links.keys.startIndex]] ?? "")
+//
+// >>>>>>> ther can be same interface drowing or ather function without college data
+//
+//       RequestKBP.dispGroup.wait()
+//
+// >>>>>> NEXT is optional example of printint data. u can use the saim for validation
+//
+//       print(RequestKBP.PointsOfChanges ?? "Change of pair ERROR")   // curriculum changes for all days 
+//       for pair in (RequestKBP.Curriculum!) {
+//           print((pair?.pairName ?? "Pair ERROR") + " " + (pair?.group ?? "Group ERROR"))
+//       }
 
-//RequestKBP.getData(stringURL: "https://kbp.by/rasp/timetable/view_beta_kbp/?cat=group&id=31")
-//RequestKBP.dispGroup.wait()
-//print(RequestKBP.PointsOfChanges ?? "ERROR")
-//for pair in (RequestKBP.Curriculum!) {
-//    print(pair?.pairName ?? "ERROR 2")
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+       
+        
     }
-
-
 }
-
