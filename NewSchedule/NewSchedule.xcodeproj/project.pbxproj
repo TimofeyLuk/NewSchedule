@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		44527474240501D500267923 /* LinkData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44527473240501D500267923 /* LinkData.swift */; };
 		447FFEE72402B62000A47221 /* RequestKBP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447FFEE62402B62000A47221 /* RequestKBP.swift */; };
 		447FFEE92402B6E500A47221 /* ParsingMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447FFEE82402B6E500A47221 /* ParsingMethods.swift */; };
 		451EF581240252A8002497C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451EF580240252A8002497C8 /* AppDelegate.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		44527473240501D500267923 /* LinkData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkData.swift; sourceTree = "<group>"; };
 		447FFEE62402B62000A47221 /* RequestKBP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestKBP.swift; sourceTree = "<group>"; };
 		447FFEE82402B6E500A47221 /* ParsingMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingMethods.swift; sourceTree = "<group>"; };
 		451EF57D240252A8002497C8 /* NewSchedule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewSchedule.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,6 +48,7 @@
 			children = (
 				447FFEE62402B62000A47221 /* RequestKBP.swift */,
 				447FFEE82402B6E500A47221 /* ParsingMethods.swift */,
+				44527473240501D500267923 /* LinkData.swift */,
 			);
 			path = Parsing;
 			sourceTree = "<group>";
@@ -153,6 +156,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				451EF585240252A8002497C8 /* ViewController.swift in Sources */,
+				44527474240501D500267923 /* LinkData.swift in Sources */,
 				447FFEE72402B62000A47221 /* RequestKBP.swift in Sources */,
 				447FFEE92402B6E500A47221 /* ParsingMethods.swift in Sources */,
 				451EF581240252A8002497C8 /* AppDelegate.swift in Sources */,
