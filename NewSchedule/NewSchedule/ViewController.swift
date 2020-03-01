@@ -8,6 +8,10 @@
 
 import UIKit
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1f5a5e6257553c8d59b78071c9963d2d89b5cbe7
 // EXAMPLE HOW TO USE COLLEGE DATA
 //RequestKBP.getData(stringURL: links[links.keys[links.keys.startIndex]] ?? "")
 //
@@ -37,5 +41,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
     }
 }
