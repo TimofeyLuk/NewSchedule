@@ -34,7 +34,6 @@ func dictionaryRequest () -> [String] {
 func getLinkDictionary() -> [String: String] {
  
     let dataArr =  dictionaryRequest()
-    
     var linkDictionary: [String: String] = [:]
     for element in dataArr {
         
