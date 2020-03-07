@@ -8,10 +8,7 @@
 
 import UIKit
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 1f5a5e6257553c8d59b78071c9963d2d89b5cbe7
 // EXAMPLE HOW TO USE COLLEGE DATA
 //RequestKBP.getData(stringURL: links[links.keys[links.keys.startIndex]] ?? "")
 //
@@ -41,6 +38,19 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        RequestKBP.getData(stringURL: links[links.keys[links.keys.startIndex]] ?? "")
+
+        // >>>>>>> ther can be same interface drowing or ather function without college data
+        RequestKBP.dispGroup.wait()
+
+        // >>>>>> NEXT is optional example of printint data. u can use the saim for validation
+
+        print(RequestKBP.PointsOfChanges)   // curriculum changes for all days
+        for pair in RequestKBP.Curriculum {
+            print( (pair!.pairName) + " >>> " + (pair!.teacher) + " >>> " + (pair!.group) + " >>> " + (pair!.room) + " >>> " +  (pair!.numberPare))
+        }
+        
 
     }
 }
